@@ -13,9 +13,10 @@
 html, body { height: 100%; }
 
 body {
-  background-color: #FFF;
+  width: 100%;
+  background-color: #EEE;
   font: 13.34px Helvetica, Arial, sans-serif;
-  font-size: small;
+  font-size: 16px;
   text-align: center;
 }
 
@@ -34,6 +35,15 @@ table {
   font: 100%;
 }
 
+@font-face {
+    font-family: "Computer Modern";
+    src: url('/fonts/Serif/cmunrm.woff') format('woff');
+  }
+
+body {
+  font-size: 20px;
+  font-family: "Computer Modern", "Georgia", serif;
+}
 /*****************************************************************************/
 /*
 /* Home
@@ -45,13 +55,35 @@ ul.posts {
 }
 
 ul.posts li {
-  line-height: 1.75em;
+  line-height: 1.2em;
+  color: #f00;
 }
 
-ul.posts span {
-  color: #aaa;
-  font-family: Monaco, "Courier New", monospace;
-  font-size: 80%;
+ul.posts li a {
+  margin: 0;
+  padding: 0;
+}
+
+ul.posts li p {
+  margin: 0;  
+  padding: 0;
+}
+
+ul.posts span#summary {
+  color: #FF355E;
+  font-size: .8em; 
+  margin: 0;  
+  padding: 0;
+  line-height: .05;
+}
+
+#about-me {
+  margin: 1em 0 2em 0em;
+}
+
+#about-me p{
+  margin: 0;
+  padding: 0;
 }
 
 /*****************************************************************************/
@@ -60,72 +92,45 @@ ul.posts span {
 /*
 /*****************************************************************************/
 
+.container {
+  float: right;
+  width: 85%;
+}
+
 .site {
   font-size: 115%;
   text-align: justify;
-  width: 42em;
+  width: 60%;
   margin: 3em auto 2em;
-  line-height: 1.5em;
+  line-height: 1.4em;
 }
 
-.site .header a {
-  font-weight: bold;
-  text-decoration: none;
-}
-
-.site .header h1.title {
-  display: inline-block;
-  margin-bottom: 2em;
-}
-
-.site .header h1.title a {
-  color: #a00;
-}
-
-.site .header h1.title a:hover {
+h1 {
   color: #000;
+  font-size: 1.5em;
 }
 
-.site .header a.extra {
-  color: #aaa;
-  margin-left: 1em;
+h1:hover {
+  color: #444;
 }
 
-.site .header a.extra:hover {
-  color: #000;
-}
-
-.site .meta {
-  color: #aaa;
-}
-
-.site .footer {
-  font-size: 80%;
-  color: #666;
-  border-top: 4px solid #eee;
-  margin-top: 2em;
-  overflow: hidden;
-}
-
-.site .footer .contact {
-  float: left;
-  margin-right: 3em;
-}
-
-.site .footer .contact a {
-  color: #8085C1;
-}
-
-.site .footer .rss {
-  margin-top: 1.1em;
-  margin-right: -.2em;
+.sidebar {
   float: right;
+  width: 15%;
+  margin-top: 3em;
+  background-color: #DC143C;
 }
 
-.site .footer .rss img {
-  border: 0;
+.sidebar a {
+  margin: 1em;
+  width: 100%;
+  font-size: 1.25em;
+  color: #eee;
 }
 
+.sidebar a:hover {
+  color: #fff;
+}
 /*****************************************************************************/
 /*
 /* Posts
@@ -135,7 +140,7 @@ ul.posts span {
 /* standard */
 .post pre {
   border: 1px solid #ddd;
-  background-color: #eef;
+  background-color: #dde;
   padding: 0 .4em;
 }
 
@@ -145,7 +150,7 @@ ul.posts span {
 
 .post code {
   border: 1px solid #ddd;
-  background-color: #eef;
+  background-color: #dde;
   padding: 0 .2em;
 }
 
@@ -162,4 +167,43 @@ ul.posts span {
 
 .post pre.terminal code {
   background-color: #333;
+}
+
+code {
+  font-family: 'Source Code Pro', sans-serif;
+  font-size: .75em;
+}
+@media only screen and (max-width: 1200px) {
+  .site {
+    width: 75%;
+    margin: 3em auto 2em;    
+  }  
+}
+
+@media only screen and (max-width: 768px) {
+  .container {
+    float: none; 
+    margin-top: 1em;
+    width: 100%;
+  }
+  
+  .site {
+    margin: 0 1em;
+    width: auto;
+  }
+
+  .sidebar {
+    float: none; 
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  h1 {
+    font-size: 1.25em;
+  }
+  .site {
+    font-size: 1em;
+  }
 }
