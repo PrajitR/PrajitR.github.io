@@ -35,6 +35,12 @@ table {
   font: 100%;
 }
 
+/*****************************************************************************/
+/*
+/* Global (across site)
+/*
+/*****************************************************************************/
+
 @font-face {
     font-family: "Computer Modern";
     src: url('/fonts/Serif/cmunrm.woff') format('woff');
@@ -44,53 +50,6 @@ body {
   font-size: 20px;
   font-family: "Computer Modern", "Georgia", serif;
 }
-/*****************************************************************************/
-/*
-/* Home
-/*
-/*****************************************************************************/
-ul.posts {
-  list-style-type: none;
-  margin-bottom: 2em;
-}
-
-ul.posts li {
-  line-height: 1.2em;
-  color: #f00;
-}
-
-ul.posts li a {
-  margin: 0;
-  padding: 0;
-}
-
-ul.posts li p {
-  margin: 0;  
-  padding: 0;
-}
-
-ul.posts span#summary {
-  color: #FF355E;
-  font-size: .8em; 
-  margin: 0;  
-  padding: 0;
-  line-height: .05;
-}
-
-#about-me {
-  margin: 1em 0 2em 0em;
-}
-
-#about-me p{
-  margin: 0;
-  padding: 0;
-}
-
-/*****************************************************************************/
-/*
-/* Site
-/*
-/*****************************************************************************/
 
 .container {
   float: right;
@@ -98,7 +57,7 @@ ul.posts span#summary {
 }
 
 .site {
-  font-size: 115%;
+  font-size: 1.15em;
   text-align: justify;
   width: 60%;
   margin: 3em auto 2em;
@@ -131,6 +90,48 @@ h1:hover {
 .sidebar a:hover {
   color: #fff;
 }
+
+/*****************************************************************************/
+/*
+/* Home
+/*
+/*****************************************************************************/
+ul.posts {
+  list-style-type: none;
+  margin-bottom: 2em;
+}
+
+ul.posts li {
+  color: #f00;
+}
+
+ul.posts li a {
+  margin: 0;
+  padding: 0;
+}
+
+ul.posts li p {
+  margin: 0;  
+  padding: 0;
+  line-height: .8em;
+}
+
+ul.posts li span#summary {
+  color: #FF355E;
+  font-size: .8em; 
+  margin: 0;  
+  padding: 0;
+}
+
+#about-me {
+  margin: 1em 0 2em 0em;
+}
+
+#about-me p{
+  margin: 0;
+  padding: 0;
+}
+
 /*****************************************************************************/
 /*
 /* Posts
@@ -173,6 +174,13 @@ code {
   font-family: 'Source Code Pro', sans-serif;
   font-size: .75em;
 }
+
+/*****************************************************************************/
+/*
+/* Media resets 
+/*
+/*****************************************************************************/
+
 @media only screen and (max-width: 1200px) {
   .site {
     width: 75%;

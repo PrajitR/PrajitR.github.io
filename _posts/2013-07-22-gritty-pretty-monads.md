@@ -6,7 +6,7 @@ tags:
 - monads
 - tutorial
 url: /gritty-pretty-monads
-summary: A[nother] monad tutorial full of examples and details.
+summary: A[nother] monad tutorial full of examples and details. Instead of analogies such as burrito or spacesuit, we dig down. 
 ---
 Maecenas vel aliquam ipsum, eu mollis velit. Etiam sagittis arcu et fermentum rhoncus. Praesent urna dui, scelerisque sit amet magna a, interdum suscipit enim. Curabitur suscipit tempor consectetur. Suspendisse eu felis tortor. Mauris consequat tempus eros, eget porta mauris vulputate ut. Nullam vitae dui at ligula mollis mattis at ac eros. Donec aliquet non erat vitae suscipit. Cras rhoncus ligula in cursus aliquam. Vestibulum et mauris at est ultrices dictum. Maecenas suscipit varius eros, non feugiat nunc placerat lacinia.
 
