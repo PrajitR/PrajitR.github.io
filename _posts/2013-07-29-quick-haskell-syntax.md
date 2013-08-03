@@ -287,20 +287,20 @@ Here we see Algebraic Data Types - we're creating brand new types. Everything af
 For `Maybe`, `Maybe String`, `Maybe Int`, and `Maybe a` are all valid, but just `Maybe` is invalid. The `a` after the `Maybe` type in `data Maybe a = ...` is called a type parameter. Type parameters allow types to be polymorphic (i.e. `Maybe String` and `Maybe Int` are both supported). Any values after the value constructor name (`a` in `Just a`) are fields. The value constructors do not need to have the same amount of fields under it. `Nothing` has zero fields, while `Just` has one field of type `a`. Again, you can pattern match on value constructors and their fields.
 
 {% highlight haskell %}
-data Tree a = Empty | Node Tree a Tree
+data Tree a = Empty | Node (Tree a) a (Tree a)
 
 treeMap :: (a -> b) -> Tree a -> Tree b
 treeMap _ Empty = Empty
 treeMap f (Node l v r) = Node (treeMap f l) (f v) (treeMap f r)
 
-data Tree a = Empty | Node { left :: Tree, value :: a, right :: Tree }
+data Tree a = Empty | Node { left :: Tree a, value :: a, right :: Tree a}
 
 -- left  :: Tree a -> Tree a
 -- value :: Tree a -> a
 -- right :: Tree a -> Tree a 
 {% endhighlight %}  
 
-Algebraic Data Types can be self referencing. `Node` has three fields, two of which are `Tree`s. The trees will be built up with `Node`s, and `Empty`s will be at the end of every tree. In `treeMap`, we check if we're at the end of a branch (`Empty`) and return an `Empty` if so. Otherwise we pattern match on the `Node` to separate the subtrees and the value, apply the function on the value, apply the function recursively on the subtrees, and join them together with a `Node`. 
+Algebraic Data Types can be self referencing. `Node` has three fields, two of which are `Tree a`s. The trees will be built up with `Node`s, and `Empty`s will be at the end of every tree. In `treeMap`, we check if we're at the end of a branch (`Empty`) and return an `Empty` if so. Otherwise we pattern match on the `Node` to separate the subtrees and the value, apply the function on the value, apply the function recursively on the subtrees, and join them together with a `Node`. 
 
 The second definition of `Tree` is the same, except "record syntax" is used. Record syntax is an easy way to access fields. Instead of pattern matching to get the left subtree, you can just call the automatically generated function `left` on a `Node`: `left tree = leftSubtree`. Record syntax is a great convenience that makes it easier to work with value constructors.
 
@@ -330,4 +330,4 @@ That's it for basic Haskell. This tutorial probably went a bit fast, so if you d
 [Real World Haskell]: http://book.realworldhaskell.org/
 [Hoogle]: http://www.haskell.org/hoogle/
 
-*Thanks to /u/dave4420 and /u/ingolemo for correcting errors!*
+*Thanks to /u/dave4420, /u/ingolemo, and /u/azeeem for correcting errors!*
