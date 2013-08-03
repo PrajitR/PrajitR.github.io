@@ -129,10 +129,10 @@ In Haskell, functions are first-class, meaning functions can be passed in as arg
 applyAndConcat :: (String -> String) -> (String -> String) -> String -> String
 applyAndConcat f g x = (f x) ++ (g x)
 
-applyAndConcat head init "Rickon" -- "RRicko"
--- (head "Rickon") ++ (init "Rickon")
--- "R" ++ "Ricko"
--- "RRicko"
+applyAndConcat tail init "Rickon" -- "ickonRicko"
+-- (tail "Rickon") ++ (init "Rickon")
+-- "ickon" ++ "Ricko"
+-- "ickonRicko"
 {% endhighlight %}
 
 `applyAndConcat` takes in two functions, each of which take a `String` and return a `String`, takes in a `String`, and returns a `String`. Functions in type signatures are wrapped by parentheses: `(String -> String)`. `applyAndConcat` applies both functions to the same input `String`, and returns the concatentation of the results. 
@@ -151,7 +151,7 @@ The function `.` is called function composition, similar to the definition you s
 f $ x = f x
 {% endhighlight %}
 
-You often see `$` in Haskell code. Looking at the definition, it seems as if `$` does nothing. `$` is used not for computation, but for reducing the amount of parentheses needed. `not $ 3 < 5` is the exact same as `not (3 < 5)`. It's just a matter of style. Also note that `$` is not a special operator - it's just a simple function, just like everything else. 
+You often see `$` in Haskell code. Looking at the definition, it seems as if `$` does nothing. For the most part, `$` is used not for computation, but for reducing the amount of parentheses needed. `not $ 3 < 5` is the exact same as `not (3 < 5)`. It's just a matter of style. Also note that `$` is not a special operator - it's just a simple function, just like everything else. 
 
 {% highlight haskell %}
 add x y = x + y
@@ -207,7 +207,7 @@ fib n =
   case n of
     0 -> 1
     1 -> 1
-    otherwise -> fib (n - 1) + fib (n - 2)
+    _ -> fib (n - 1) + fib (n - 2)
 
 fib n =
   if n < 2
@@ -215,7 +215,7 @@ fib n =
    else fib (n - 1) + fib (n - 2)
 {% endhighlight %} 
 
-These are just variations of the same `fib` function, using different syntax. The first one is called "guard expressions", and uses `|` followed by different cases and their values. `otherwise` is just a catch-all value (in fact, `otherwise` is the exact same as `True`). Note that there is no `=` before a guard expression. `case ... of ...` is extremely similar to pattern matching, except that you can also use it in the middle of a computation. `if ... then ... else ...` is just a regular if statement. Note that every `if` must have a corresponding `else` in Haskell. 
+These are just variations of the same `fib` function, using different syntax. The first one is called "guard expressions", and uses `|` followed by different cases and their values. `otherwise` is just a catch-all value (in fact, `otherwise` is the exact same as `True`). Note that there is no `=` before a guard expression. `case ... of ...` is also pattern matching, except that you can also use it in the middle of a computation. `if ... then ... else ...` is just a regular if statement. Note that every `if` must have a corresponding `else` in Haskell. 
 
 Let's define some bread-and-butter Haskell functions.
 
@@ -277,9 +277,9 @@ not :: Bool -> Bool
 not True  = False
 not False = True
 
-fromJust :: Maybe a -> a
-fromJust Nothing = error "Maybe.fromJust: Nothing"
-fromJust (Just x) = x
+fromMaybe :: a -> Maybe a -> a
+fromMaybe x Nothing  = x
+fromMaybe _ (Just y) = y
 {% endhighlight %}
 
 Here we see Algebraic Data Types - we're creating brand new types. Everything after the `data` and before the `=` is going to be part of the type signature (`func :: type1 -> type2 -> ... -> returntype`). The parts after the `=` are called value constructors, and will be part of the function computation. The `|` works like an "or": a `Bool` can be either a `True` *or* a `False`. `Bool` is always part of the type signature, whereas during the computation, you work with `True` and `False`. Notice how you can both pattern match on the value constructors and use them during the computation (`not True = False`). 
@@ -329,3 +329,5 @@ That's it for basic Haskell. This tutorial probably went a bit fast, so if you d
 [Learn You a Haskell]: http://learnyouahaskell.com/
 [Real World Haskell]: http://book.realworldhaskell.org/
 [Hoogle]: http://www.haskell.org/hoogle/
+
+*Thanks to /u/dave4420 and /u/ingolemo for correcting errors!*
