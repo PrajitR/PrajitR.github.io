@@ -103,6 +103,7 @@ ul.posts {
 
 ul.posts li {
   color: #f00;
+  padding: .5em;
 }
 
 ul.posts li a {
@@ -161,13 +162,13 @@ ul.posts li span#summary {
 
 /* terminal */
 .post pre.terminal {
-  border: 1px solid #000;
-  background-color: #333;
+  border: 2px solid #000;
+  background-color: #dde;
   color: #FFF;
 }
 
 .post pre.terminal code {
-  background-color: #333;
+  background-color: #dde;
 }
 
 code {
