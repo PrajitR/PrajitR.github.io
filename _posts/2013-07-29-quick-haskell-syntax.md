@@ -8,7 +8,7 @@ url: /quick-tour-haskell-syntax
 summary: For programmers who want a quick and dirty way to parse Haskell syntax. 
 ---
 If you're a programmer who wants to parse Haskell for a blog post or wants a cursory overview of the language, this post is for you. It's going to be somewhat longer than the [learnxinyminutes][] style, as it will go a little more in depth. Without further ado, let's get started.
-[learnxinyminutes]: learnxinyminutes.com/docs/haskell/ "LearnXinYMinutes Haskell"
+[learnxinyminutes]: http://learnxinyminutes.com/docs/haskell/ "LearnXinYMinutes Haskell"
 
 Starting with the typical basic types:
 {% highlight haskell %}
@@ -331,3 +331,5 @@ That's it for basic Haskell. This tutorial probably went a bit fast, so if you d
 [Hoogle]: http://www.haskell.org/hoogle/
 
 *Thanks to /u/dave4420, /u/ingolemo, and /u/azeeem for correcting errors!*
+
+[Reddit discussion](http://www.reddit.com/r/haskell/comments/1jlpnu/a_quick_tour_of_haskell_syntax/)
