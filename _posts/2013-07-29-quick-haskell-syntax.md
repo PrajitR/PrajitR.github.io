@@ -43,7 +43,7 @@ False || True -- True
 18 <= 13 -- False
 {% endhighlight %}
 
-Couple of things to notice. `not` is a function: it takes a boolean value, and negates it. Functions in Haskell do not require parentheses. The general syntax is `func arg1 arg2 arg3 ...`. However, parentheses may be required in some expressions: `not (3 < 5)`, evaluates to `True`, but `not 3 < 5` is invalid, as Haskell will interpret the expression as `(not 3) < 5`, erroring out when it tries to boolean negate a number.
+Couple of things to notice. `not` is a function: it takes a boolean value, and negates it. Functions in Haskell do not require parentheses. The general syntax is `func arg1 arg2 arg3 ...`. However, parentheses may be required in some expressions: `not (3 < 5)`, evaluates to `False`, but `not 3 < 5` is invalid, as Haskell will interpret the expression as `(not 3) < 5`, erroring out when it tries to boolean negate a number.
 
 Also, `` 11 `div` 8 `` is the same thing as `div 11 8`. Backticks around any function call will allow you to use it in infix style, as opposed to prefix. It's just syntactic sugar for some functions that read better in infix style. 
 
