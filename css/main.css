@@ -1,42 +1,5 @@
 /*****************************************************************************/
 /*
-/* Common
-/*
-/*****************************************************************************/
-
-/* Global Reset */
-* {
-  margin: 0;
-  padding: 0;
-}
-
-html, body { height: 100%; }
-
-body {
-  width: 100%;
-  background-color: #EEE;
-  font: 13.34px Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  text-align: center;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-size: 100%; }
-
-h1 { margin-bottom: 1em; }
-p { margin: 1em 0; }
-
-a         { color: #00a; }
-a:hover   { color: #000; }
-a:visited { color: #a0a; }
-
-table {
-  font-size: inherit;
-  font: 100%;
-}
-
-/*****************************************************************************/
-/*
 /* Global (across site)
 /*
 /*****************************************************************************/
@@ -45,94 +8,122 @@ table {
     font-family: "Computer Modern";
     src: url('/fonts/Serif/cmunrm.woff') format('woff');
   }
-
 body {
+  background: #EEE;
+}
+
+body, h1 {
   font-size: 20px;
   font-family: "Computer Modern", "Georgia", serif;
 }
 
-.container {
-  float: right;
-  width: 85%;
-}
-
-.site {
+#content {
+  width: 65%;
   font-size: 1.15em;
   text-align: justify;
-  width: 60%;
   margin: 3em auto 2em;
   line-height: 1.4em;
 }
 
-h1 {
+#content h1, #content h2 {
   color: #000;
   font-size: 1.5em;
+  margin-bottom: 1.1em;
+  font-weight: 600;
 }
 
-h1:hover {
+#content h1:hover, #content h2:hover {
   color: #444;
 }
 
-.sidebar {
-  float: right;
-  width: 15%;
+#content h2 {
+  font-size: 1.2em;
+}
+
+#content p {
+  margin-top: .8em;
+  margin-bottom: .8em;
+}
+
+#sidebar {
   margin-top: 3em;
-  background-color: #DC143C;
+  width: 90%;
+  border-right: 1px solid black;
+  margin: 1em 0;
 }
 
-.sidebar a {
-  margin: 1em;
-  width: 100%;
+#sidebar a, #sidebar p {
+  text-align: center;
+  color: #111;
+}
+
+#sidebar a {
   font-size: 1.25em;
-  color: #eee;
+  color: #428bca;
 }
 
-.sidebar a:hover {
-  color: #fff;
+#sidebar a:hover {
+  color: #000;
 }
 
+#sidebar p {
+  padding-top: .5em;
+  line-height: 1.2em;
+}
+
+#sidebar-images a:hover {
+  text-decoration: none;
+}
+
+#sidebar-images a img {
+  opacity: 0.8;
+  margin-top: 1em;
+  margin-right: .4em;
+  width: 25%;
+  height: 25%;
+  max-width: 80px;
+  max-height: 80px;
+}
+
+#sidebar-images a img:hover{
+  opacity: 1;
+}
+
+#sidebar-images a img#twitter-img {
+  margin-right: 0;
+}
 /*****************************************************************************/
 /*
 /* Home
 /*
 /*****************************************************************************/
-ul.posts {
+#content ul.posts {
   list-style-type: none;
   margin-bottom: 2em;
-}
-
-ul.posts li {
-  color: #f00;
-  padding: .5em;
-}
-
-ul.posts li a {
-  margin: 0;
   padding: 0;
 }
 
-ul.posts li p {
+#content ul.posts li {
+  color: #f00;
+  padding-bottom: .9em;
+}
+
+#content ul.posts li a {
+  margin: 0;
+}
+
+#content ul.posts li p {
   margin: 0;  
   padding: 0;
   line-height: .8em;
 }
 
-ul.posts li span#summary {
+#content ul.posts li span#summary {
   color: #FF355E;
   font-size: .8em; 
   margin: 0;  
   padding: 0;
 }
-
-#about-me {
-  margin: 1em 0 2em 0em;
-}
-
-#about-me p{
-  margin: 0;
-  padding: 0;
-}
-
 /*****************************************************************************/
 /*
 /* Posts
@@ -158,6 +149,8 @@ ul.posts li span#summary {
 
 .post pre code {
   border: none;
+  font-size: 1.4em;
+  line-height: 1.7em;
 }
 
 /* terminal */
@@ -172,47 +165,30 @@ ul.posts li span#summary {
 }
 
 code {
-  font-family: 'Source Code Pro', sans-serif;
-  font-size: .75em;
+  font-size: .8em;
 }
-
 /*****************************************************************************/
 /*
 /* Media resets 
 /*
 /*****************************************************************************/
-
-@media only screen and (max-width: 1200px) {
-  .site {
-    width: 75%;
-    margin: 3em auto 2em;    
-  }  
-}
-
-@media only screen and (max-width: 768px) {
-  .container {
-    float: none; 
-    margin-top: 1em;
-    width: 100%;
-  }
-  
-  .site {
-    margin: 0 1em;
-    width: auto;
-  }
-
-  .sidebar {
-    float: none; 
-    width: 100%;
-    height: auto;
+@media screen and (max-width: 1170px){
+  #content {
+    width: 80%;
   }
 }
 
-@media only screen and (max-width: 480px) {
-  h1 {
-    font-size: 1.25em;
+@media screen and (max-width: 940px){
+  #content {
+    width: 90%;
   }
-  .site {
-    font-size: 1em;
+  #sidebar {
+    width: 100%;
+    border-right: none;
+    border-top: 5px solid black;
+  }
+  #sidebar-images {
+    width: 240px;
+    margin: .5em auto;
   }
 }
