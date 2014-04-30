@@ -6,53 +6,48 @@ tags:
 - javascript
 - tutorial
 url: /d3-source-code-part1
-summary: For those curious how the internals of d3.js is implemented
+summary: For those curious how the internals of d3.js is implemented.
 ---
-d3.js is an amazing data visualization library that makes it easy to create
-interactive graphs on the web. It has a very simple interface but is still
-extremely powerful. This post is for those who want to understand how d3 is
-implemented. I assume you have some familiarity with d3 (a couple of tutorials
-should be good enough).
+If you've ever seen an interactive visualization on a website (ex. New York Times), chances are that it is being powered by d3.js. d3, created by Mike Bostock and maintained by Bostock and Jason Davies, is the [fourth most starred repository on GitHub](https://github.com/search?q=stars%3a%3E1&s=stars&type=Repositories). It is an amazing data visualization library that makes it easy to create interactive graphs on the web. It has a relatively simple interface that is backed by a powerful and extensible engine. But if you've ever used d3, you've probably wondered how the magic _really_ is created.
+
+This post is for those who want to understand d3's internals. I assume you have some familiarity with d3 (a couple of [tutorials](https://github.com/mbostock/d3/wiki/Tutorials) should be good enough), because I won't spend time explaining the basics.
 
 ## Approach
 
-The d3 source code is hosted on [GitHub](https://github.com/mbostock/d3). All
-the relevant code is in the `src/` and `test/` folders. Each folder in `src/`
-has an `index.js` file where other files are imported in. My basic approach
-is to just follow the order of imports, reading each file in succession. If
-a file doesn't make sense, I just look at the corresponding tests and the 
-[d3 wiki](https://github.com/mbostock/d3/wiki).
+The d3 source code is [hosted on GitHub](https://github.com/mbostock/d3). All the relevant code is in the `src/` folder. Each subfolder in `src/` has an `index.js` which imports the relevant of the files.
+
+My approach of reading the code was to follow the order of imports in each `index.js`. If a file didn't make sense, I looked at the corresponding tests and the [d3 wiki](https://github.com/mbostock/d3/wiki).
 
 ## Subfolders
 
-`src/` has 20 subfolders in it. A description of each follows:
+`src/` has 20 subfolders in it. A short description of each follows:
 
-* `arrays/`: Contains various array methods such as `min`, `bisect`, `zip`, and `nest`. Since the array is the main form of data representation in d3, these methods form the basis for manipulating data. 
-* `behavior/`: Deals mainly with the behavior of drag (including touch drags) and zoom events. For zoom, it handles redisplaying of data.
-* `color/`: Deals with the different color representations in d3 (such as rgb, hcl, and hsl). Also defines convenience functions for each color representation (like brighter and darker methods).
+* `arrays/`: Various array methods such as `min`, `bisect`, `zip`, and `nest`. Since the array is the main form of data representation in d3, these methods serve as the basis for manipulating data. Also defines `Map` and `Set` classes.
+* `behavior/`: Behavior of drag (including touch drags) and zoom events. For zoom, it handles redisplaying of data.
+* `color/`: Different color representations, such as rgb, hcl, and hsl. Also defines convenience functions for each color representation, like `brighter` and `darker` methods.
 * `compat/`: Compatibility between browsers, namely getting the current time and the ability to set styles on DOM elements.
-* `core/`: General purpose methods and variables that are used throughout the d3 source (such as a class subtyping utility and a method rebinding utility).
-* `dsv/`: Handles the opening and parsing of various file types (such as csv and tsv). Useful as most "real" data comes in such formats.
-* `event/`: Handles the catching and dispatching of events such as touch, drag, click, and timer.
+* `core/`: General purpose methods and variables that are used throughout the d3 source, such as a class subtyping utility and a method rebinding utility.
+* `dsv/`: Opening and parsing of various file types, such as csv and tsv. Important because most data comes in these formats.
+* `event/`: Catching and dispatching of events such as touch, drag, click. Also defines an interal timer utility that efficiently handles parallel timers.
 * `format/`: Convenient formatting functions for various data types.
-* `geo/`: Handles geography functions and algorithms. If you're working with maps or globes, this folder serves as the backbone.
-* `geom/`: Functions and algorithms for 2D geometry. Also holds the guts for creating the [Voronoi diagram](en.wikipedia.org/wiki/Voronoi_diagram). 
-* `interpolate/`: Interpolation functions for various data types (such as colors, strings, and numbers). These functions do a lot of heavy lifting.
-* `layout/`: "Ready-made" layouts of popular charts (such as bar charts, pie charts, force diagrams, treemaps). Useful to read if you're planning on creating your own unique type of chart for a d3 plugin.
-* `locale/`: Defaults for various locales (ex. US, GB, BR, RU) and formatting for times.
-* `math/`: General math functions like random distributions and trigometric functions.
-* `scale/`: Defines the various scale types (ex. linear, log, ordinal) that map inputs to outputs.
-* `selection/`: The real meat of d3 - selections of elements in the DOM. Allows you to select an element or group of elements, apply transformations to them, and bind data to them. Binding data is split into update, enter, and exit selections. If you could only read one folder, this would be it.
-* `svg/`: The low level stuff that deals with the actual generation of svg markup (since d3 produces raw svg).
-* `time/`: Dedicated to time issues (ex. minutes, months, scales, formatting).
-* `transition/`: Deals with generating transitions of elements (ex. tweening, easing).
-* `xhr/`: Deals with XMLHttpRequests (needed for getting data from a server).
+* `geo/`: Handles geography functions and algorithms. If you're working with maps, this folder serves as the backbone.
+* `geom/`: Functions and algorithms for 2D geometry. Also has a `voronoi` folder for creating [Voronoi diagrams](en.wikipedia.org/wiki/Voronoi_diagram). 
+* `interpolate/`: Interpolation functions for various data types, such as colors, strings, and numbers. Important for transitions.
+* `layout/`: "Ready-made" classes for popular charts, such as bar charts, pie charts, force diagrams, and treemaps. Useful to read if you're planning on creating your own unique chart. 
+* `locale/`: Defaults for various locales, such as US, GB, BR, RU, and formatting for times.
+* `math/`: General math functions like random distributions and trigonometry.
+* `scale/`: Various scale types that map inputs to outputs, such as linear, log, ordinal scales.
+* `selection/`: The real meat of d3 - selections of elements and binding of data. Allows you to select an element or group of elements, apply transformations, and bind data. Binding data is split into update, enter, and exit selections. If you could only read one folder, you should read this.
+* `svg/`: The low level code that generates the svg markup (since d3 produces raw svg).
+* `time/`: Time issues, such as minutes, months, scales, formatting.
+* `transition/`: Handles transitions of elements. Keeps track of all the transitions for a particular element, and uses interpolation, tweening, and easing to generate the actual transition.
+* `xhr/`: Creating and sending of XMLHttpRequests, which are needed get data from a server.
 
-Is your brain fried? For the remainder of this post, let's look at three folders: `core/`, `array/`, and `math/`.
+And that's the general overview of d3's components! For the remainder of this post, we'll look in-depth at three folders: `core/`, `array/`, and `math/`. I have created a general description for each file that I have commented. I'll only cover a couple main files from each folder. I would recommend reading the rest of the files on your own.
 
 ## Core
 
-`core/` defines various general purpose functions and variables that are used within the d3 source, so it's a good idea to look at it.
+`core/` defines general purpose utilities and variables that are used within the d3 source.
 
 {% highlight javascript %}
 function d3_functor(v) {
@@ -62,7 +57,7 @@ function d3_functor(v) {
 d3.functor = d3_functor;
 {% endhighlight %}
 
-`functor.js` defines a function that checks if the parameter is a function. If it is, return it, otherwise, return a function that returns the constant. This function is useful when another function supports both functions and values as parameters: the business logic can just call a function without needing to know the parameter type.
+`functor.js` takes one parameter: if it is a function, return it; otherwise, return a wrapper function that always returns the value. This abstracts away the need to know if a value is a function or not: instead, just call the function returned from `d3_functor`. This is used mainly in the `svg/` and `geom/` folders.
 
 {% highlight javascript %}
 function d3_class(ctor, properties) {
@@ -73,12 +68,12 @@ function d3_class(ctor, properties) {
         enumerable: false
       });
     }
-  } catch (e) {
+  } catch (e) { // Fallback.
     ctor.prototype = properties;
   }
 }
 {% endhighlight %}
-`class.js` defines a helper method that adds properties of an object to a function/class. This function is used mainly when defining new classes (for example, d3.map in `array/map.js` and d3.set in `array/set.js`).
+`class.js` defines a helper method that adds properties of an object to a class. It tries to use the Javascript built-in `Object.defineProperty`, but falls back to prototype assignment if it fails. This function is used mainly when defining new classes (for example, `d3.map` in `array/map.js` and `d3.set` in `array/set.js`).
 
 {% highlight javascript %}
 var d3_subclass = {}.__proto__?
@@ -93,33 +88,34 @@ function(object, prototype) {
   for (var property in prototype) object[property] = prototype[property];
 };
 {% endhighlight %}
-`subclass.js` subtypes an object using another prototype. The implementation depends on browser compatibility (either prototype injection or direct extension). 
+`subclass.js` subtypes a class using another prototype. Used in `selection/` (where each selection also inherits the Javascript array methods), `transition/`, and `geom/`.
 
 {% highlight javascript %}
 d3.rebind = function(target, source) {
   var i = 1, n = arguments.length, method;
-  while (++i < n) target[method = arguments[i]] = d3_rebind(target, source, source[method]); // source[method] returns function
+  while (++i < n) target[method = arguments[i]] = d3_rebind(target, source, source[method]); // source[method] returns a function.
+  // `method` is first being assigned to arguments[i]. Then it gets passed into `d3_rebind` (as source[method]).
   return target;
 };
 
 function d3_rebind(target, source, method) {
   return function() {
-    var value = method.apply(source, arguments); 
+    var value = method.apply(source, arguments); // Make `source` the method's "this" value.
     return value === source ? target : value; // setter : getter
   };
 }
 {% endhighlight %}
-`rebind.js` copies methods (which are passed in as string arguments) from `source` to `target`. For example, if you wanted to copy the the `foo` and `bar` methods from `a` to `b`, you would call `d3.rebind(b, a, "foo", "bar")`. The code loops through all the string arguments passed in and rebinds these methods to target. In `d3_rebind`, a wrapper function is returned. This function first calls the method (using `source` as the context). Then it determines the return value using d3's convention for getters and setters: if a value is set, return the object/class (in this case, `target`); otherwise return the value.
+`rebind.js` copies methods (which are passed in as string arguments) from `source` to `target`. For example, if you wanted to copy the the `foo` and `bar` methods from `a` to `b`, you would call `d3.rebind(b, a, "foo", "bar")`. The code loops through all the string arguments and rebinds these methods to `target`. In `d3_rebind`, a wrapper function is returned. This function first calls the method (using `source` as the context). Then it determines the return value using d3's convention for getters and setters: if a value is set, return the object for chaining (in this case, `target`); otherwise, return the value.
 
 {% highlight javascript %}
-import "array"; // also part of `core/`
+import "array"; // Also part of `core/`.
 
 var d3_document = document,
     d3_documentElement = d3_document.documentElement,
     d3_window = window;
 
 // Redefine d3_array if the browser doesn’t support slice-based conversion.
-// d3_array is originally defined as [].slice.call(list)
+// d3_array is originally defined as function (list) { return [].slice.call(list); }
 try {
   d3_array(d3_documentElement.childNodes)[0].nodeType;
 } catch(e) {
@@ -130,24 +126,25 @@ try {
   };
 }
 {% endhighlight %}
-`document.js` defines d3 variables for the DOM document, window, and documentElement (which is normally the `<html></html>` tag). It deals with browser compatibility issues for array slicing. 
+`document.js` defines d3 variables for the DOM document, window, and documentElement (which is normally the `<html></html>` tag). It also handles browser compatibility issues for array slicing. 
 
-There are other functions in `core/` that you can look at if you're interested. For example, `ns.js` determines if a namespace prefix is passed and returns an appropriate object. Other functions are merely convenience functions (ex. `noop.js` defines a function that does nothing).
+There are other functions in `core/` that I skip over which are also useful. For example, `ns.js` determines if a namespace prefix is used. Others are convenience functions, like `noop.js`, which defines a function that does nothing.
 
 ## Array
 
-`array/` defines functions on arrays that serve as the backbone for dealing with data. It also defines `Map` and `Set` classes. For the most part, these functions are self explanatory and self contained.
+`array/` defines functions on arrays, which serve as the main data representation. It also defines `Map` and `Set` classes. For the most part, these functions are self explanatory and self contained.
 
 {% highlight javascript %}
-import "ascending"; // sorts array in ascending array if passed to d3.sort
+import "ascending"; // Comparator function that helps sort arrays in ascending order.
 
 function d3_bisector(compare) {
   return {
-    left: function(a, x, lo, hi) {
+    left: function(a, x, lo, hi) { // a = array, x = desired value
+      // Optional arguments.
       if (arguments.length < 3) lo = 0;
       if (arguments.length < 4) hi = a.length;
       while (lo < hi) {
-        var mid = lo + hi >>> 1;
+        var mid = lo + hi >>> 1; // Divides lo + hi by 2 and truncates the quotient.
         if (compare(a[mid], x) < 0) lo = mid + 1;
         else hi = mid;
       }
@@ -158,7 +155,7 @@ function d3_bisector(compare) {
       if (arguments.length < 4) hi = a.length;
       while (lo < hi) {
         var mid = lo + hi >>> 1;
-        if (compare(a[mid], x) > 0) hi = mid;
+        if (compare(a[mid], x) > 0) hi = mid; // Different than `left`.
         else lo = mid + 1;
       }
       return lo;
@@ -166,23 +163,23 @@ function d3_bisector(compare) {
   };
 }
 
-var d3_bisect = d3_bisector(d3_ascending);
+var d3_bisect = d3_bisector(d3_ascending); // Default bisect.
 d3.bisectLeft = d3_bisect.left;
 d3.bisect = d3.bisectRight = d3_bisect.right;
 
 d3.bisector = function(f) {
   return d3_bisector(f.length === 1
-      ? function(d, x) { return d3_ascending(f(d), x); }
-      : f);
+      ? function(d, x) { return d3_ascending(f(d), x); } // Function on one variable (like function (d) { return d.date; })
+      : f); // Function on two variables (like function (a, b) { return a.age - b.age; });
 };
 {% endhighlight %}
-`bisect.js` defines functions that determine where in a sorted array an element should be placed. It has `left` and `right` forms, which differ when the insert position is ambiguous (ex. inserting 2 in the array `[0, 2, 2, 2, 4]`). It is implemented by using a simple binary search, and the difference between the `left` and `right` functions is whether the `lo` or `hi` is updated. Furthermore, there is also `d3.bisector`, which takes a function that maps values before being compared (either taking 1 or 2 arguments).
+`bisect.js` defines functions that determine where in a sorted array an element should be inserted. It has `left` and `right` forms, which differ when the insert position is ambiguous (ex. inserting `2` in the array `[0, 2, 2, 2, 4]`). It is implemented with a binary search. The difference between the `left` and `right` is whether the `lo` or `hi` is updated when `a[mid] == x`. This has the effect of choosing either the right most or left most valid position to insert the value. There is also `d3.bisector`, which allows the user to pass in a custom comparator function (instead of using the default `ascending` function).
 
 {% highlight javascript %}
 import "../math/abs";
 
 d3.range = function(start, stop, step) {
-  // optional parameters
+  // Optional parameters.
   if (arguments.length < 3) {
     step = 1;
     if (arguments.length < 2) {
@@ -192,28 +189,29 @@ d3.range = function(start, stop, step) {
   }
   if ((stop - start) / step === Infinity) throw new Error("infinite range");
   var range = [],
-       k = d3_range_integerScale(abs(step)), // used to prevent rounding errors
+       k = d3_range_integerScale(abs(step)), // Used to prevent rounding errors.
        i = -1,
        j;
-  start *= k, stop *= k, step *= k; // scale up by magnitude to deal with only integer steps
-  if (step < 0) while ((j = start + step * ++i) > stop) range.push(j / k); // scale back down
+  start *= k, stop *= k, step *= k; // Scale up by magnitude to deal with integer steps (instead of floating point steps).
+  if (step < 0) while ((j = start + step * ++i) > stop) range.push(j / k); // Scale back down.
   else while ((j = start + step * ++i) < stop) range.push(j / k);
   return range;
 };
 
-// Finds magnitude (10 base) that multiplies into a number to make it an integer
+// Finds the magnitude (base 10) that multiplies into a number to make it an integer.
 function d3_range_integerScale(x) {
   var k = 1;
-  while (x * k % 1) k *= 10; // while number * magnitude is still a decimal, increase magnitude by factor of 10
+  while (x * k % 1) k *= 10; // While number * magnitude is still a decimal, increase magnitude by factor of 10.
   return k;
 }
 {% endhighlight %}
-`range.js` is similar to Python's range function. Given a start, stop, and step, it computes the range of numbers that fit the specified parameters. The interesting part of this code is that it scales everything up to integers, and then scales back down to decimals. This is to prevent rounding errors that accumulate if you use floating points (`[1.0, 2.1, 3.2] == [10/10, 21/10, 32/10]` will give you `false`!). So the code must first compute the scale factor, scale everything up, run a regular range interval, and scale each number back down when added to the range array. This is a useful piece of code to keep in mind if you ever have to deal with pesky floating points in the future.
+`range.js` is similar to Python's range function. Given start, stop, and step values, it computes the corresponding range of numbers. The interesting part of this implementation is the use of integer scaling. This prevents rounding errors when using floating points (`[1.0, 2.1, 3.2] != [10/10, 21/10, 32/10]`). So we must first compute the scale factor, scale the parameters up, run a regular range interval, and scale each number back down when added to the range array. This is a useful trick to keep in mind if you ever have to deal with floating point precision in the future.
 
 {% highlight javascript %}
 import "../core/class";
 
 d3.map = function(object) {
+  // Set all properties of object in a map and return it.
   var map = new d3_Map;
   if (object instanceof d3_Map) object.forEach(function(key, value) { map.set(key, value); });
   else for (var key in object) map.set(key, object[key]);
@@ -222,7 +220,7 @@ d3.map = function(object) {
 
 function d3_Map() {}
 
-d3_class(d3_Map, {
+d3_class(d3_Map, { // `d3_class` is from `core/class.js`
   has: d3_map_has,
   get: function(key) {
     return this[d3_map_prefix + key];
@@ -249,7 +247,7 @@ d3_class(d3_Map, {
   }
 });
 
-var d3_map_prefix = "\0", // prevent collision with built-ins
+var d3_map_prefix = "\0", // Prevent collision with built-in properties.
     d3_map_prefixCode = d3_map_prefix.charCodeAt(0);
 
 function d3_map_has(key) {
@@ -278,13 +276,14 @@ function d3_map_empty() {
   return true;
 }
 {% endhighlight %}
-`map.js` defines a Map class. According to the d3 wiki, it is extremely similar to regular Javascript objects, but it avoids issues when using built-in property names as keys (ex. `obj["__proto__"] = 42). This is in fact an implementation of the proposed Map in EMCAScript 6. The most important thing to note is the `d3_map_prefix`: "\0" is added to every key to prevent key collisions with built-in properties (ex. `map.set("__proto__", 42)` would result in an internal key of `"\0" + "__proto__"`). The actual map class is defined through using `d3_class` (from `core/class.js` highlight earlier). It also offers convenience functions like `keys` and `values`.
+`map.js` defines a Map class. According to the d3 wiki, maps are extremely similar to regular Javascript objects, but they [avoid issues](https://github.com/mbostock/d3/wiki/Arrays#d3_map) when using built-in property names as keys (ex. `obj["__proto__"] = 42`). This is an implementation of the proposed Map in EMCAScript 6. The most important thing to note is the `d3_map_prefix` is added to every key to prevent collisions with built-in properties (ex. `map.set("__proto__", 42)` would create an internal key of `"\0" + "__proto__"`). The actual map class is defined using `d3_class` (from `core/class.js` highlighted earlier). It also offers convenience functions like `keys` and `values`.
 
 {% highlight javascript %}
 import "../core/class";
 import "map";
 
 d3.set = function(array) {
+  // Add to set the array's values.
   var set = new d3_Set;
   if (array) for (var i = 0, n = array.length; i < n; ++i) set.add(array[i]);
   return set;
@@ -295,23 +294,23 @@ function d3_Set() {}
 d3_class(d3_Set, {
   has: d3_map_has,
   add: function(value) {
-    this[d3_map_prefix + value] = true; // d3_map_prefix is "\0" (used to prevent key collisions)
+    this[d3_map_prefix + value] = true; // d3_map_prefix is from `array/map` (used to prevent key collisions).
     return value;
   },
   remove: function(value) {
     value = d3_map_prefix + value;
-    return value in this && delete this[value]; // check if key is added and delete if so
+    return value in this && delete this[value]; 
   },
   values: d3_map_keys,
   size: d3_map_size,
   empty: d3_map_empty,
   forEach: function(f) {
-    // pass a value into a function only if the value was passed in through set.add
+    // Only values added through set.add().
     for (var value in this) if (value.charCodeAt(0) === d3_map_prefixCode) f.call(this, value.substring(1));
   }
 });
 {% endhighlight %}
-`set.js` defines a set class (proposed in ES6) that which holds the unique values of an array. It uses the same namespace prefix as `d3.map` to prevent collisions. `d3.set` just loops through an array ands adds each element to a constructed Set object.  It leverages `array/map.js` for most of its functions. `set.add` makes the passed in key equal true in the internal object, making it like a switch that can only be turned on when adding (can be turned off only when calling `set.remove` which deletes the key completely). 
+`set.js` defines a set class (also proposed in ES6) that holds unique values of an array. It uses the same namespace prefix as `d3.map` to prevent collisions. Keys are internally represented like light switches that can't be turned off after being turned on (with the exception of calling `remove()`). `Set` leverages `array/map.js` for most of its functions.
 
 {% highlight javascript %}
 d3.nest = function() {
@@ -321,35 +320,35 @@ d3.nest = function() {
       sortValues,
       rollup;
 
-  // helper function that creates the tree
+  // Helper function that creates the tree.
   function map(mapType, array, depth) {
-    // deals with base case: the leaves of the tree
+    // Deals with base case: the leaves of the tree.
     if (depth >= keys.length) return rollup 
-        ? rollup.call(nest, array) : (sortValues // if a rollup function is defined, call it
-        ? array.sort(sortValues) // if no rollup, sort the leaves if requested
-        : array); // if user doesn't want it sorted, return the bare array
+        ? rollup.call(nest, array) : (sortValues // If a rollup function is defined, call it.
+        ? array.sort(sortValues) // If no rollup, sort the leaves if requested (sortValues is a comparator function).
+        : array); // If user doesn't want it sorted, return the bare array.
 
     var i = -1,
         n = array.length,
-        key = keys[depth++], // equivalent to: key = keys[depth]; depth++;
+        key = keys[depth++], // Equivalent to: key = keys[depth]; depth++;
         keyValue,
         object,
         setter,
         valuesByKey = new d3_Map,
         values;
 
-    // add values to respective key arrays (create array if is none)
+    // Add object to the correct key array (create array if is none).
     while (++i < n) {
-      // get the requested key value of the object, and check if it is already in the map
+      // Get the requested key value of the object, and check if it is already in the map.
       if (values = valuesByKey.get(keyValue = key(object = array[i]))) {
         values.push(object);
       } else {
-        // if not in the map, add the object in an array (which allows for pushing more objects)
+        // If not in the map, add the object in an array (which allows for pushing more objects).
         valuesByKey.set(keyValue, [object]);
       }
     }
 
-    // define appropriate tree object and setting function for next level
+    // Define appropriate tree object and setting function for next level.
     if (mapType) {
       object = mapType();
       setter = function(keyValue, values) {
@@ -362,25 +361,26 @@ d3.nest = function() {
       };
     }
 
-    // recurse over next level
+    // Recurse over next level.
     valuesByKey.forEach(setter);
     return object;
   }
 
-  // converts tree into array of key-value pairs
+  // Converts regular tree into tree of objects with "key" and "value" properties.
+  // Also allows you to sort the keys of each level.
   function entries(map, depth) {
-    // base case of leaves
+    // Base case of leaves.
     if (depth >= keys.length) return map;
 
     var array = [],
         sortKey = sortKeys[depth++];
 
-    // create an array of k-v pairs (recurse if necessary)
+    // Create an array of k-v pairs, using recursion for the values.
     map.forEach(function(key, keyMap) {
       array.push({key: key, values: entries(keyMap, depth)});
     });
 
-    // sort level if needed
+    // Sort current level if needed (sortKey is a comparator function).
     return sortKey
         ? array.sort(function(a, b) { return sortKey(a.key, b.key); })
         : array;
@@ -394,6 +394,7 @@ d3.nest = function() {
     return entries(map(d3.map, array, 0), 0);
   };
 
+  // A new level for the tree.
   nest.key = function(d) {
     keys.push(d);
     return nest;
@@ -401,6 +402,7 @@ d3.nest = function() {
 
   // Specifies the order for the most-recently specified key.
   // Note: only applies to entries. Map keys are unordered!
+  // order is a comparator.
   nest.sortKeys = function(order) {
     sortKeys[keys.length - 1] = order;
     return nest;
@@ -413,7 +415,7 @@ d3.nest = function() {
     return nest;
   };
 
-  // define a rollup function to be used on each group of leaves
+  // Define a rollup function to be used on each group of leaves.
   nest.rollup = function(f) {
     rollup = f;
     return nest;
@@ -422,19 +424,21 @@ d3.nest = function() {
   return nest;
 };
 {% endhighlight %}
-`nest.js` is probably the most tricky method in the `array/` folder. `d3.nest` allows you to transform an array (usually of objects) into a nested tree with multiple levels. It allows you to order the keys of a sublevel and apply functions to the leaves of the tree. It uses a recursive definition in order to build up deeper sublevels of the tree, until it ends up with the leaves sublevel. 
+`nest.js` is probably the most tricky function in the `array/` folder. `d3.nest` allows you to transform an array of object into a nested tree with multiple levels split on property values. It allows you to order the keys of a sublevel and apply functions to the leaves of the tree. It recursively creates deeper sublevels of the tree, until it ends up with the leaves. I would recommend checking out the [nest entry on the d3 wiki](https://github.com/mbostock/d3/wiki/Arrays#-nest) and [d3.nest examples](http://bl.ocks.org/phoebebright/raw/3176159/) to better understand how d3.nest works.
+
+There are a lot of other functions defined in `array/`, but I'll let you look over them yourself. These are great functions to read if you find yourself needing to manipulate arrays.
 
 ## Math
 
-The `math/` folder defines various mathematical functions, some of which are exposed and some that are internal. Like `array/`, they are self contained, though they are less readable than the array methods because they require knowledge of mathematical definitions.
+The `math/` folder defines various mathematical functions, some of which are exposed and some that are internal. Like `array/`, they are self contained, though they require some mathematical knowledge.
 
 {% highlight javascript %}
-// Converts an SVG transform string into matrix representation
+// Converts an SVG transform string into matrix representation.
 import "../core/document";
-import "../core/ns";
+import "../core/ns"; // Namespace check.
 
 d3.transform = function(string) {
-  var g = d3_document.createElementNS(d3.ns.prefix.svg, "g"); // Create svg "g" tag
+  var g = d3_document.createElementNS(d3.ns.prefix.svg, "g"); // Create svg "g" tag.
   return (d3.transform = function(string) {
     if (string != null) {
       g.setAttribute("transform", string);
@@ -458,7 +462,7 @@ function d3_transform(m) {
       kx = d3_transformNormalize(r0), // x-scale
       kz = d3_transformDot(r0, r1), // shear
       ky = d3_transformNormalize(d3_transformCombine(r1, r0, -kz)) || 0; // y-scale
-  // Determinant check (ad - bc). If determinant < 0, multiply with column by -1 and swap signs.
+  // Determinant check (ad - bc). If determinant < 0, multiply through with -1 to make determinant > 0.
   if (r0[0] * r1[1] < r1[0] * r0[1]) {
     r0[0] *= -1;
     r0[1] *= -1;
@@ -484,7 +488,7 @@ function d3_transformDot(a, b) {
   return a[0] * b[0] + a[1] * b[1];
 }
 
-// Normalize column (so they add up to 1).
+// Normalize (so values add up to 1).
 function d3_transformNormalize(a) {
   var k = Math.sqrt(d3_transformDot(a, a));
   if (k) {
@@ -494,7 +498,7 @@ function d3_transformNormalize(a) {
   return k;
 }
 
-// Used to make row a orthogonal to row b using Gram-Schmidt (k is negative dot-product).
+// Used to make `a` orthogonal to `b` using Gram-Schmidt (k is negative dot-product).
 function d3_transformCombine(a, b, k) {
   a[0] += k * b[0];
   a[1] += k * b[1];
@@ -506,11 +510,12 @@ function d3_transformCombine(a, b, k) {
 // [b d f]  -> [0 1 0]
 var d3_transformIdentity = {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0};
 {% endhighlight %}
-`transform.js` converts an SVG transform string into actual matrix representation. Used for matrix interpolation (in `interpolate/`). 
+`transform.js` converts an SVG transform string into actual matrix representation. Used for matrix interpolation in `interpolate/`, which enables [impressive geometric transitions](bl.ocks.org/mbostock/1345853). The details of this file requires some basic linear algebra knowledge (how matrix transformations work).
 
 {% highlight javascript %}
 d3.random = {
   normal: function(µ, σ) {
+    // Optional arguments.
     var n = arguments.length;
     if (n < 2) σ = 1;
     if (n < 1) µ = 0;
@@ -531,14 +536,14 @@ d3.random = {
       return Math.exp(random()); // log(exp(x)) = x
     };
   },
-  // Mean of m independent and identically distributed random variables between [0,1]
+  // Mean of m independent and identically distributed random variables between [0,1].
   bates: function(m) {
     var random = d3.random.irwinHall(m);
     return function() {
       return random() / m;
     };
   },
-  // Sum of m independent and identically distributed random variables between [0,1]
+  // Sum of m independent and identically distributed random variables between [0,1].
   irwinHall: function(m) {
     return function() {
       for (var s = 0, j = 0; j < m; j++) s += Math.random();
@@ -547,8 +552,10 @@ d3.random = {
   }
 };
 {% endhighlight %}
-`random.js` defines various random number generators to be easily used.
+`random.js` defines various random number generators. The definition of `normal` requires mathematical knowledge of normal (Gaussian) distributions. 
+
+Again, there are other functions in `math/` that I recommend you look at, though I personally don't think they are as interesting as `array/`. 
 
 ## Conclusion
 
-In this post, we looked at what each folder in d3's source does. We also looked in depth into three folders: `core/`, `array/`, and `math/`. In the next post, we'll finally look at the real meat of d3: selections. 
+In this post, we examined the roles of each folder in d3's source. We also looked in depth into three folders: `core/`, `array/`, and `math/`. Hopefully, the internals of d3 are starting to make sense. In the next post, we'll finally look at the real meat of d3: selections and transitions. Stay tuned!
