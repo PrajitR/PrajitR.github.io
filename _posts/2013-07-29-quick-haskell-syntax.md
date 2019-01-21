@@ -105,7 +105,7 @@ The function takes in two variables, `x` and `y`, and just returns `x` untouched
 concatenate3 :: String -> String -> String -> String
 concatenate3 x y z = x ++ y ++ z
 
-allEqual :: (Eq a) => a -> a -> a
+allEqual :: (Eq a) => a -> a -> a -> Bool
 allEqual x y z = x == y && y == z
 {% endhighlight %}
 
